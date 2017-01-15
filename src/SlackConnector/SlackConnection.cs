@@ -137,8 +137,7 @@ namespace SlackConnector
 
         private Task HandleUserJoined(UserJoinedMessage inboundMessage)
         {
-            SlackUser slackUser = inboundMessage.User.ToSlackUser();
-            _userCache[slackUser.Id] = slackUser;
+            SlackUser slackUser = inboundMessage.User.ToSlackUser(_userCache);
 
             return RaiseUserJoinedAsync(slackUser);
         }
@@ -204,7 +203,7 @@ namespace SlackConnector
             var users = await client.GetUsers(SlackKey);
 
             //TODO: Update user cache
-            return users.Select(u => u.ToSlackUser());
+            return users.Select(u => u.ToSlackUser(_userCache));
         }
 
         //TODO: Cache newly created channel, and return if already exists
