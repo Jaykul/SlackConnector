@@ -7,5 +7,6 @@ namespace SlackConnector.Connections.Clients.Chat
     internal interface IChatClient
     {
         Task PostMessage(string slackKey, string channel, string text, IList<SlackAttachment> attachments);
+        Task PostMessage(string slackKey, string channel, string text, string from = null, IList<SlackAttachment> attachments = null);
     }
 }
