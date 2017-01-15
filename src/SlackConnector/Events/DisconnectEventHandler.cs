@@ -1,4 +1,4 @@
 ﻿namespace SlackConnector.Events
 {
-    public delegate void DisconnectEventHandler();
+    public delegate void DisconnectEventHandler(object sender);
 }

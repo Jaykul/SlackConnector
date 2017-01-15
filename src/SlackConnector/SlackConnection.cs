@@ -28,7 +28,7 @@ namespace SlackConnector
 
         private Dictionary<string, SlackUser> _userCache { get; set; }
         public IReadOnlyDictionary<string, SlackUser> UserCache => _userCache;
-        
+
         public bool IsConnected => ConnectedSince.HasValue;
         public DateTime? ConnectedSince { get; private set; }
         public string SlackKey { get; private set; }
@@ -99,7 +99,7 @@ namespace SlackConnector
                 MessageType = inboundMessage.MessageSubType
             };
 
-            return RaiseMessageReceived(message);
+            return RaiseMessageReceivedAsync(message);
         }
 
         private Task HandleGroupJoined(GroupJoinedMessage inboundMessage)
@@ -110,7 +110,7 @@ namespace SlackConnector
             var hub = inboundMessage.Channel.ToChatHub();
             _connectedHubs[channelId] = hub;
 
-            return RaiseChatHubJoined(hub);
+            return RaiseChatHubJoinedAsync(hub);
         }
 
         private Task HandleChannelJoined(ChannelJoinedMessage inboundMessage)
@@ -121,7 +121,7 @@ namespace SlackConnector
             var hub = inboundMessage.Channel.ToChatHub();
             _connectedHubs[channelId] = hub;
 
-            return RaiseChatHubJoined(hub);
+            return RaiseChatHubJoinedAsync(hub);
         }
 
         private Task HandleDmJoined(DmChannelJoinedMessage inboundMessage)
@@ -132,7 +132,7 @@ namespace SlackConnector
             var hub = inboundMessage.Channel.ToChatHub(_userCache.Values.ToArray());
             _connectedHubs[channelId] = hub;
 
-            return RaiseChatHubJoined(hub);
+            return RaiseChatHubJoinedAsync(hub);
         }
 
         private Task HandleUserJoined(UserJoinedMessage inboundMessage)
@@ -140,7 +140,7 @@ namespace SlackConnector
             SlackUser slackUser = inboundMessage.User.ToSlackUser();
             _userCache[slackUser.Id] = slackUser;
 
-            return RaiseUserJoined(slackUser);
+            return RaiseUserJoinedAsync(slackUser);
         }
 
         private SlackUser GetMessageUser(string userId)
@@ -171,7 +171,7 @@ namespace SlackConnector
         public async Task Say(string to, string message, string from)
         {
             var client = _connectionFactory.CreateChatClient();
-            await client.PostMessage(SlackKey, to, message, from:from);
+            await client.PostMessage(SlackKey, to, message, from: from);
         }
 
 
@@ -244,18 +244,18 @@ namespace SlackConnector
         public event DisconnectEventHandler OnDisconnect;
         private void RaiseOnDisconnect()
         {
-            OnDisconnect?.Invoke();
+            OnDisconnect?.Invoke(this);
         }
 
         public event MessageReceivedEventHandler OnMessageReceived;
-        private async Task RaiseMessageReceived(SlackMessage message)
+        private async Task RaiseMessageReceivedAsync(SlackMessage message)
         {
             var e = OnMessageReceived;
             if (e != null)
             {
                 try
                 {
-                    await e(message);
+                    await Task.Run(() => e(this, new SlackMessageEventArgs { Message = message }));
                 }
                 catch (Exception)
                 {
@@ -265,7 +265,7 @@ namespace SlackConnector
         }
 
         public event ChatHubJoinedEventHandler OnChatHubJoined;
-        private async Task RaiseChatHubJoined(SlackChatHub hub)
+        private async Task RaiseChatHubJoinedAsync(SlackChatHub hub)
         {
             var e = OnChatHubJoined;
 
@@ -273,7 +273,7 @@ namespace SlackConnector
             {
                 try
                 {
-                    await e(hub);
+                    await Task.Run(() => e(this, new ChatHubJoinedEventArgs { ChatHub = hub }));
                 }
                 catch
                 {
@@ -282,16 +282,20 @@ namespace SlackConnector
         }
 
         public event UserJoinedEventHandler OnUserJoined;
-        private async Task RaiseUserJoined(SlackUser user)
+        private async Task RaiseUserJoinedAsync(SlackUser user)
         {
             var e = OnUserJoined;
 
             if (e != null)
             {
-                await e(user);
+                try
+                {
+                    await Task.Run(() => e(this, new UserJoinedEventArgs { User = user }));
+                }
+                catch
+                {
+                }
             }
         }
-
-        //TODO: USER JOINED EVENT HANDLING
     }
 }

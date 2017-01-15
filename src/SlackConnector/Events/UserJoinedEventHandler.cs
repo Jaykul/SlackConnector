@@ -1,7 +1,12 @@
-using System.Threading.Tasks;
 using SlackConnector.Models;
+using System;
 
 namespace SlackConnector.Events
 {
-    public delegate Task UserJoinedEventHandler(SlackUser user);
+    public class UserJoinedEventArgs : EventArgs
+    {
+        public SlackUser User { get; set; }
+    }
+
+    public delegate void UserJoinedEventHandler(object sender, UserJoinedEventArgs eventArgs);
 }

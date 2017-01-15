@@ -92,9 +92,9 @@
     <Compile Include="Connections\Sockets\Messages\Outbound\PingMessage.cs" />
     <Compile Include="Connections\Sockets\Messages\Outbound\TypingIndicatorMessage.cs" />
     <Compile Include="ConsoleLoggingLevel.cs" />
-    <Compile Include="EventHandlers\UserJoinedEventHandler.cs" />
-    <Compile Include="EventHandlers\ChatHubJoinedEventHandler.cs" />
-    <Compile Include="EventHandlers\DisconnectEventHandler.cs" />
+    <Compile Include="Events\UserJoinedEventHandler.cs" />
+    <Compile Include="Events\ChatHubJoinedEventHandler.cs" />
+    <Compile Include="Events\DisconnectEventHandler.cs" />
     <Compile Include="Exceptions\CommunicationException.cs" />
     <Compile Include="Exceptions\HandshakeException.cs" />
     <Compile Include="Exceptions\MissingChannelException.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Models\BotMessage.cs" />
-    <Compile Include="EventHandlers\MessageReceivedEventHandler.cs" />
+    <Compile Include="Events\MessageReceivedEventHandler.cs" />
     <Compile Include="ISlackConnection.cs" />
     <Compile Include="Connections\Models\Channel.cs" />
     <Compile Include="Connections\Responses\HandshakeResponse.cs" />

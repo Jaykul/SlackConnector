@@ -1,7 +1,12 @@
-using System.Threading.Tasks;
 using SlackConnector.Models;
+using System;
 
 namespace SlackConnector.Events
 {
-    public delegate Task ChatHubJoinedEventHandler(SlackChatHub chatHub);
+    public class ChatHubJoinedEventArgs : EventArgs
+    {
+        public SlackChatHub ChatHub { get; set; }
+    }
+
+    public delegate void ChatHubJoinedEventHandler(object sender, ChatHubJoinedEventArgs eventArgs);
 }
