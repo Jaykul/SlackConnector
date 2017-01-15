@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using SlackConnector.EventHandlers;
+using SlackConnector.Events;
 using SlackConnector.Models;
 
 namespace SlackConnector

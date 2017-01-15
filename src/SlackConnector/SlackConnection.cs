@@ -10,7 +10,7 @@ using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
 using SlackConnector.Connections.Sockets.Messages.Inbound;
 using SlackConnector.Connections.Sockets.Messages.Outbound;
-using SlackConnector.EventHandlers;
+using SlackConnector.Events;
 using SlackConnector.Exceptions;
 using SlackConnector.Extensions;
 using SlackConnector.Models;

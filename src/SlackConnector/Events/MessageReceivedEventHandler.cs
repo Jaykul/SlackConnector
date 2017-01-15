@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using SlackConnector.Models;
 
-namespace SlackConnector.EventHandlers
+namespace SlackConnector.Events
 {
     public delegate Task MessageReceivedEventHandler(SlackMessage message);
 }
