@@ -1,4 +1,6 @@
-﻿namespace SlackConnector.Models
+﻿using SlackConnector.Connections.Sockets.Messages.Inbound;
+
+namespace SlackConnector.Models
 {
     public class SlackMessage
     {
@@ -8,5 +10,6 @@
         public string Text { get; set; }
         public SlackUser User { get; set; }
         public double TimeStamp { get; set; }
+        public MessageSubType MessageType { get; set; }
     }
 }
